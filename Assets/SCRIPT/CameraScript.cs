@@ -14,7 +14,7 @@ public class CameraScript : MonoBehaviour {
 	public Text countDown;
 	public Camera m_camera;
 
-
+	private GameObject target;
 	// Use this for initialization
 	void Start () {
 
@@ -27,10 +27,10 @@ public class CameraScript : MonoBehaviour {
 		
 		if (Physics.Raycast (ray, out hit)) {
 			Transform objectHit = hit.transform;
-
+			this.target = hit.transform.gameObject;
 			if (hit.transform.gameObject.layer == ConstantScript.CAMERA_LAYER || 
 			    hit.transform.gameObject.layer == ConstantScript.GOAL_LAYER) {
-				Debug.Log ("CAMERA HIT");
+				//Debug.Log ("CAMERA HIT");
 				if (prevGobj && prevMaterial) {
 					this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
 				}
@@ -50,14 +50,15 @@ public class CameraScript : MonoBehaviour {
 					this.timerTemp = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
-					this.Jump(hit.transform.gameObject);
+					this.transform.GetChild(2).GetComponent<GlitchFx>().startGlitch = true;
+//					this.Jump(hit.transform.gameObject);
 				}
 			}else{ 
 			// watch something not a camera
 				this.timerTemp = 0.0f;
 				countDown.gameObject.SetActive(false);
 				countDown.text = "0.0";
-				this.Jump(hit.transform.gameObject);
+				//this.Jump(hit.transform.gameObject);
 			}
 
 			
@@ -66,6 +67,7 @@ public class CameraScript : MonoBehaviour {
 			// Do something with the object that was hit by the raycast.
 		} 
 		else {
+			//this.target = null;
 			if(this.prevGobj){
 				if(this.prevGobj.layer == ConstantScript.CAMERA_LAYER || 
 				   this.prevGobj.layer == ConstantScript.GOAL_LAYER){
@@ -84,14 +86,16 @@ public class CameraScript : MonoBehaviour {
 
 	}
 
-	public void Jump(GameObject target){
-		if (target) {
-			if(target.layer == ConstantScript.CAMERA_LAYER){
+	public void Jump(){
+		Debug.Log ("jumping");
+		if (this.target) {
+			Debug.Log("ciat");
+			if(this.target.layer == ConstantScript.CAMERA_LAYER){
 			//	Transform temp = target.transform.GetChild(0);
-				this.transform.position = target.transform.position;
+				this.transform.position = this.target.transform.position;
 				//this.transform.rotation = temp.rotation;
 			}
-			else if(target.layer == ConstantScript.GOAL_LAYER){
+			else if(this.target.layer == ConstantScript.GOAL_LAYER){
 				GameSceneHandler.gameFlag = GameSceneHandler.GAME_STATUS.GAME_OVER;
 			}
 
