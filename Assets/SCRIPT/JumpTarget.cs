@@ -5,22 +5,32 @@ using System.Collections.Generic;
 public class JumpTarget : MonoBehaviour {
 
 	private GameObject player;
-	private List<GameObject> child = new List<GameObject>();
+	[SerializeField]
+	private GameObject foundEffect;
+	bool explored = false;
 
 	// Use this for initialization
 	void Awake () {
 		player = GameObject.Find("Player");
-		if( transform.childCount > 0){
-			for(int i=0 ; i < transform.childCount ; i++){
-				child.Add(transform.GetChild(i).gameObject);
-			}
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		foreach(GameObject g in child){
-			g.SetActive(player.transform.position != this.transform.position);
+
+		bool playerIsOnThis = player.transform.position == this.transform.position;
+
+		if(!explored){
+			if(playerIsOnThis){
+				explored = true;
+				GameObject g = Instantiate(foundEffect) as GameObject;
+				g.transform.SetParent(transform);
+				g.transform.localPosition = Vector3.zero;
+			}
 		}
+
+		for(int i=0 ; i < transform.childCount ; i++){
+			transform.GetChild(i).gameObject.SetActive(!playerIsOnThis);
+		}
+
 	}
 }
