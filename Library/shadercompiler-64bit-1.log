@@ -1,7 +1,59 @@
 Base path: /Applications/Unity/Unity.app/Contents
 Pipe name: \\.\pipe\UnityShaderCompiler-64bit-1-2080326400
 Cmd: getPlatforms
+Cmd: preprocess
+  insize=447 outsize=447 ok=1
+Cmd: preprocess
+  insize=4159 outsize=1016 ok=1
+Cmd: preprocess
+  insize=7083 outsize=4587 ok=1
+Cmd: preprocess
+  insize=12815 outsize=2575 ok=1
+Cmd: preprocess
+  insize=1048 outsize=1039 ok=1
+Cmd: preprocess
+  insize=840 outsize=355 ok=1
+Cmd: preprocess
+  insize=2410 outsize=1760 ok=1
+Cmd: preprocess
+  insize=11975 outsize=2457 ok=1
+Cmd: preprocess
+  insize=1138 outsize=481 ok=1
+Cmd: preprocess
+  insize=1576 outsize=990 ok=1
+Cmd: preprocess
+  insize=1802 outsize=527 ok=1
+Cmd: preprocess
+  insize=3821 outsize=1112 ok=1
+Cmd: preprocess
+  insize=851 outsize=364 ok=1
+Cmd: preprocess
+  insize=1445 outsize=1442 ok=1
+Cmd: preprocess
+  insize=815 outsize=355 ok=1
+Cmd: preprocess
+  insize=1500 outsize=667 ok=1
+Cmd: preprocess
+  insize=2596 outsize=1625 ok=1
+Cmd: preprocess
+  insize=792 outsize=789 ok=1
 Cmd: compileSnippet
-  api=0 type=0 insize=9591 outsize=6594 kw= ok=1
+  api=0 type=0 insize=751 outsize=1893 kw=SHADOWS_DEPTH ok=1
 Cmd: compileSnippet
-  api=0 type=1 insize=9591 outsize=6 kw= ok=1
+  api=0 type=1 insize=751 outsize=6 kw=SHADOWS_DEPTH ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=977 outsize=9701 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=977 outsize=6 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=934 outsize=5509 kw=DIRECTIONAL SHADOWS_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=934 outsize=6 kw=DIRECTIONAL SHADOWS_OFF ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=977 outsize=11461 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=977 outsize=6 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF _NORMALMAP ok=1
+Cmd: compileSnippet
+  api=0 type=0 insize=934 outsize=6250 kw=DIRECTIONAL SHADOWS_OFF _NORMALMAP ok=1
+Cmd: compileSnippet
+  api=0 type=1 insize=934 outsize=6 kw=DIRECTIONAL SHADOWS_OFF _NORMALMAP ok=1
