@@ -3,9 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CameraScript : MonoBehaviour {
-
-// meganeroppy
-
+	
 	public Material chosenObject;
 	private Material prevMaterial;
 	private GameObject prevGobj;
@@ -16,10 +14,17 @@ public class CameraScript : MonoBehaviour {
 
 	private GameObject target;
 	// Use this for initialization
-	void Start () {
 
+	private AudioSource audioSource;
+	[SerializeField]
+	private AudioClip se_jumpComplete;
+	[SerializeField]
+	private AudioClip se_jumpSatrt;
+
+
+	void Awake(){
+		audioSource = transform.GetComponent<AudioSource>();
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		RaycastHit hit;
@@ -47,6 +52,10 @@ public class CameraScript : MonoBehaviour {
 				}
 
 				if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + ConstantScript.LOOK_DELAY)){
+
+					audioSource.PlayOneShot(se_jumpSatrt);
+
+
 					this.timerTemp = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
@@ -90,8 +99,12 @@ public class CameraScript : MonoBehaviour {
 		Debug.Log ("jumping");
 		if (this.target) {
 			Debug.Log("ciat");
+
 			if(this.target.layer == ConstantScript.CAMERA_LAYER){
-			//	Transform temp = target.transform.GetChild(0);
+
+				audioSource.PlayOneShot(se_jumpComplete);
+
+				//	Transform temp = target.transform.GetChild(0);
 				this.transform.position = this.target.transform.position;
 				//this.transform.rotation = temp.rotation;
 			}
