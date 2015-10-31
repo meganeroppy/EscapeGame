@@ -12,7 +12,13 @@ public class Gate : MonoBehaviour {
 	[SerializeField]
 	private GateKey keyObject;
 	
+	[SerializeField]
+	private AudioClip se;
+	
+	private AudioSource audioSource;
+	
 	private void Awake(){
+		audioSource = GetComponent<AudioSource>();
 		transform.localPosition = transform.localPosition;
 	}
 	
@@ -32,5 +38,6 @@ public class Gate : MonoBehaviour {
 	private void Unlock(){
 		Debug.Log("Gate Unlocked");
 		transform.DOLocalMove(transform.localPosition + unlockedOffset, 1f);
+		audioSource.Play();
 	}
 }
