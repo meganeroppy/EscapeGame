@@ -35,7 +35,9 @@ public class GameSceneHandler : MonoBehaviour {
 		else {
 			this.canvas.SetActive(true);
 			this.player.SetActive(true);
-			this.cameraForVr.SetActive(false);
+			if(this.cameraForVr != null){
+				this.cameraForVr.SetActive(false);
+			}
 		}
 
 		ResetLevel ();
