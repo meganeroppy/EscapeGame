@@ -1,13 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.VR;
 
 public class GameSceneHandler : MonoBehaviour {
+
+	public static bool isVR = VRSettings.enabled;
+	public GameObject canvas;
+	public GameObject player;
+	public GameObject cameraForVr;
 
 	public enum GAME_STATUS
 	{
 		PLAYING,
-		GAME_OVER}
-	;
+		GAME_OVER
+	};
 	
 	public static GAME_STATUS gameFlag = GAME_STATUS.PLAYING;
 
@@ -19,6 +25,19 @@ public class GameSceneHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Debug.Log ("vr setting is "+isVR);
+	
+		if (isVR) {
+			this.canvas.SetActive(false);
+			this.player.SetActive(false);
+			this.cameraForVr.SetActive(true);
+		} 
+		else {
+			this.canvas.SetActive(true);
+			this.player.SetActive(true);
+			this.cameraForVr.SetActive(false);
+		}
+
 		ResetLevel ();
 	}
 	

@@ -17,4 +17,6 @@ public static class ConstantScript
 	public const string SCENE_INGAME = "Main";
 
 	public const float GLITCH_SPEED = 1.0f;
+	public const float GLITCH_ATSTART_SPEED = 0.2f;
+	
 }

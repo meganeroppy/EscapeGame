@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ChamberMaker : MonoBehaviour {
 
-	private int line = 10;
+	private int line = 10; // test
 	private int raw = 10;
 	private int floor = 10;
 
