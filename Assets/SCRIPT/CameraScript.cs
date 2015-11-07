@@ -21,9 +21,16 @@ public class CameraScript : MonoBehaviour {
 	[SerializeField]
 	private AudioClip se_jumpSatrt;
 
+	
+	private Vector3 curPos; 
+	private Vector3 prevPos; 
+	private BeaconMaker beacon;
 
 	void Awake(){
 		audioSource = transform.GetComponent<AudioSource>();
+		curPos = transform.position;
+		beacon = GetComponent<BeaconMaker>();
+		
 	}
 	// Update is called once per frame
 	void Update () {
@@ -102,11 +109,17 @@ public class CameraScript : MonoBehaviour {
 
 			if(this.target.layer == ConstantScript.CAMERA_LAYER){
 
+				// play se
 				audioSource.PlayOneShot(se_jumpComplete);
+				
+				prevPos = this.transform.position;
 
 				//	Transform temp = target.transform.GetChild(0);
 				this.transform.position = this.target.transform.position;
 				//this.transform.rotation = temp.rotation;
+				
+				curPos = this.transform.position;
+				UpdateBeacon();
 			}
 			else if(this.target.layer == ConstantScript.GOAL_LAYER){
 				GameSceneHandler.gameFlag = GameSceneHandler.GAME_STATUS.GAME_OVER;
@@ -129,5 +142,9 @@ public class CameraScript : MonoBehaviour {
 
 	public void MoveRight(float speed){
 		this.transform.Rotate(Vector3.up * speed * Time.deltaTime);
+	}
+	
+	private void UpdateBeacon(){
+		beacon.UpdatePos(prevPos, curPos);
 	}
 }
