@@ -62,7 +62,6 @@ public class CameraScript : MonoBehaviour {
 
 					audioSource.PlayOneShot(se_jumpSatrt);
 
-
 					this.timerTemp = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
@@ -116,6 +115,7 @@ public class CameraScript : MonoBehaviour {
 
 				//	Transform temp = target.transform.GetChild(0);
 				this.transform.position = this.target.transform.position;
+				this.transform.rotation = this.target.transform.rotation;
 				//this.transform.rotation = temp.rotation;
 				
 				curPos = this.transform.position;
