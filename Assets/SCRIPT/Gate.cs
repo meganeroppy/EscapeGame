@@ -12,9 +12,6 @@ public class Gate : MonoBehaviour {
 	[SerializeField]
 	private GateKey keyObject;
 	
-	[SerializeField]
-	private AudioClip se;
-	
 	private AudioSource audioSource;
 	
 	private void Awake(){
