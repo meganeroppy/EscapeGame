@@ -9,14 +9,21 @@ public static class ConstantScript
 
 	public const int CAMERA_LAYER = 8;
 	public const int GOAL_LAYER = 9;
-
+	public const int FLOOR_LAYER = 10;
+	public const int ROBOT_LAYER = 11;
 	//public const float LOOK_LENGTH = 2.0f;
-	public const float LOOK_LENGTH = 0.5f;
+
 	public const float LOOK_DELAY = 0.0f;
 
 	public const string SCENE_INGAME = "Main";
 
-	public const float GLITCH_SPEED = 1.0f;
-	public const float GLITCH_ATSTART_SPEED = 0.2f;
+
+	public const float GLITCH_ATSTART_SPEED = 0.5f;
+
+	//グリッチアニメーション長さ、1.0f->3秒. 5.0fだったら、 3/5秒で終わる
+	public const float GLITCH_SPEED = 5.0f;
+
+	//見つめる長さー＞0.2秒
+	public const float LOOK_LENGTH = 0.2f;
 	
 }

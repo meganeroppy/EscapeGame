@@ -3,10 +3,14 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CameraScript : MonoBehaviour {
+
+	public Image circularTarget;
 	
 	public Material chosenObject;
 	private Material prevMaterial;
 	private GameObject prevGobj;
+
+	public GameObject handController;
 
 	private float timerTemp;
 	public Text countDown;
@@ -21,16 +25,10 @@ public class CameraScript : MonoBehaviour {
 	[SerializeField]
 	private AudioClip se_jumpSatrt;
 
-	
-	private Vector3 curPos; 
-	private Vector3 prevPos; 
-	private BeaconMaker beacon;
 
 	void Awake(){
 		audioSource = transform.GetComponent<AudioSource>();
-		curPos = transform.position;
-		beacon = GetComponent<BeaconMaker>();
-		
+		this.handController.SetActive (false);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -41,6 +39,7 @@ public class CameraScript : MonoBehaviour {
 			Transform objectHit = hit.transform;
 			this.target = hit.transform.gameObject;
 			if (hit.transform.gameObject.layer == ConstantScript.CAMERA_LAYER || 
+			    hit.transform.gameObject.layer == ConstantScript.ROBOT_LAYER || 
 			    hit.transform.gameObject.layer == ConstantScript.GOAL_LAYER) {
 				//Debug.Log ("CAMERA HIT");
 				if (prevGobj && prevMaterial) {
@@ -53,6 +52,8 @@ public class CameraScript : MonoBehaviour {
 
 				this.timerTemp += Time.deltaTime;
 
+				this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
+
 				if(this.timerTemp >= ConstantScript.LOOK_DELAY){
 					countDown.gameObject.SetActive(true);
 					countDown.text = ""+(this.timerTemp - ConstantScript.LOOK_DELAY);
@@ -62,10 +63,19 @@ public class CameraScript : MonoBehaviour {
 
 					audioSource.PlayOneShot(se_jumpSatrt);
 
+
 					this.timerTemp = 0.0f;
+					this.circularTarget.fillAmount = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
-					this.transform.GetChild(2).GetComponent<GlitchFx>().startGlitch = true;
+					if(GameSceneHandler.isVR){
+						this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
+					}
+					else{
+						this.transform.GetChild(2).gameObject.GetComponent<GlitchFx>().startGlitch = true;
+					}
+
+					//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
 //					this.Jump(hit.transform.gameObject);
 				}
 			}else{ 
@@ -73,6 +83,7 @@ public class CameraScript : MonoBehaviour {
 				this.timerTemp = 0.0f;
 				countDown.gameObject.SetActive(false);
 				countDown.text = "0.0";
+				this.circularTarget.fillAmount = 0.0f;
 				//this.Jump(hit.transform.gameObject);
 			}
 
@@ -85,6 +96,7 @@ public class CameraScript : MonoBehaviour {
 			//this.target = null;
 			if(this.prevGobj){
 				if(this.prevGobj.layer == ConstantScript.CAMERA_LAYER || 
+				   this.prevGobj.layer == ConstantScript.ROBOT_LAYER || 
 				   this.prevGobj.layer == ConstantScript.GOAL_LAYER){
 					if (prevGobj && prevMaterial) {
 						this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
@@ -94,6 +106,7 @@ public class CameraScript : MonoBehaviour {
 					this.timerTemp = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
+					this.circularTarget.fillAmount = 0.0f;
 				}
 			}
 
@@ -102,26 +115,47 @@ public class CameraScript : MonoBehaviour {
 	}
 
 	public void Jump(){
-		Debug.Log ("jumping");
+		//Debug.Log ("jumping");
 		if (this.target) {
-			Debug.Log("ciat");
+			//Debug.Log("ciat");
 
-			if(this.target.layer == ConstantScript.CAMERA_LAYER){
+			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
+			   this.target.layer == ConstantScript.ROBOT_LAYER){
 
-				// play se
+				if(this.target.layer == ConstantScript.CAMERA_LAYER){
+					this.handController.SetActive (false);
+				}
+				else if(this.target.layer == ConstantScript.ROBOT_LAYER){
+					this.handController.SetActive (true);
+				}
+
 				audioSource.PlayOneShot(se_jumpComplete);
-				
-				prevPos = this.transform.position;
-
+				if(GameSceneHandler.isVR){
+					Transform temp = this.target.transform.GetChild(0);
+					this.transform.parent.gameObject.transform.position = this.target.transform.position;
+					this.transform.parent.rotation = temp.rotation;
+				}
+				else{
+					Transform temp = this.target.transform.GetChild(0);
+					//Debug.Log("temp rotation x "+temp.rotation.eulerAngles.x+" y = "+temp.rotation.eulerAngles.y);
+					this.transform.parent.rotation = temp.rotation;
+					this.transform.position = this.target.transform.position;
+				}
 				//	Transform temp = target.transform.GetChild(0);
-				this.transform.position = this.target.transform.position;
-				this.transform.rotation = this.target.transform.rotation;
-				//this.transform.rotation = temp.rotation;
-				
-				curPos = this.transform.position;
-				UpdateBeacon();
+				//this.transform.parent.gameObject.transform.position = this.target.transform.position;
+
 			}
 			else if(this.target.layer == ConstantScript.GOAL_LAYER){
+				audioSource.PlayOneShot(se_jumpComplete);
+				if(GameSceneHandler.isVR){
+					this.transform.parent.gameObject.transform.position = this.target.transform.position;
+				}
+				else{
+					this.transform.position = this.target.transform.position;
+				}
+				//Transform temp = target.transform.GetChild(0);
+
+				//this.transform.rotation = temp.rotation;
 				GameSceneHandler.gameFlag = GameSceneHandler.GAME_STATUS.GAME_OVER;
 			}
 
@@ -142,9 +176,5 @@ public class CameraScript : MonoBehaviour {
 
 	public void MoveRight(float speed){
 		this.transform.Rotate(Vector3.up * speed * Time.deltaTime);
-	}
-	
-	private void UpdateBeacon(){
-		beacon.UpdatePos(prevPos, curPos);
 	}
 }

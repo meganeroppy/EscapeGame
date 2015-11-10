@@ -101,22 +101,39 @@ public class GlitchFx : MonoBehaviour
 
 	private float speed = ConstantScript.GLITCH_SPEED;
 	public bool startGlitch = false;
+	public bool startGlitchStart = true;
 	private float index = 1.0f;
     void Update()
     {
 
-		if (startGlitch) {
+		if (startGlitch || startGlitchStart) {
 
 			if(this.intensity >= MAX_INTENSITY && this.index == 1.0f){
 				this.index = -1.0f;
-				this.transform.parent.GetComponent<CameraScript>().Jump();
+
+				if(GameSceneHandler.isVR){
+					this.gameObject.GetComponent<CameraScript>().Jump();
+				}
+				else{
+					this.transform.parent.gameObject.GetComponent<CameraScript>().Jump();
+				}
+//				this.gameObject.GetComponent<CameraScript>().Jump();
+
 			}
-			this.intensity += speed * this.index * Time.deltaTime;
+
+			if(startGlitchStart){
+				this.intensity += ConstantScript.GLITCH_ATSTART_SPEED * this.index * Time.deltaTime;
+			}
+			else if(startGlitch){
+				this.intensity += speed * this.index * Time.deltaTime;
+			}
+
 
 			if(this.intensity < 0.0f){
 				this.intensity = 0.0f;
 				this.index = 1.0f;
 				startGlitch = false;
+				startGlitchStart =false;
 			}
 
 

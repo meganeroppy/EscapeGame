@@ -25,4 +25,13 @@ public class GateKey : MonoBehaviour {
 			}
 		}
 	}
+	
+	private void OnTriggerEnter(Collider col){
+		if(col.gameObject.tag.Equals("PlayerHands")){
+			if(!unlocked){
+				Debug.Log("GateKey Unlocked");
+				unlocked = true;
+			}
+		}
+	}
 }

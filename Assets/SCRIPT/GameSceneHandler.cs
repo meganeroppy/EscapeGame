@@ -23,10 +23,9 @@ public class GameSceneHandler : MonoBehaviour {
 
 	public GameObject winPanel;
 
-	// Use this for initialization
-	void Start () {
-		//Debug.Log ("vr setting is "+isVR);
-	
+	public GameObject winPanelVR;
+
+	void Awake(){
 		if (isVR) {
 			this.canvas.SetActive(false);
 			this.player.SetActive(false);
@@ -39,6 +38,13 @@ public class GameSceneHandler : MonoBehaviour {
 				this.cameraForVr.SetActive(false);
 			}
 		}
+	}
+
+	// Use this for initialization
+	void Start () {
+		//Debug.Log ("vr setting is "+isVR);
+	
+
 
 		ResetLevel ();
 	}
@@ -63,7 +69,13 @@ public class GameSceneHandler : MonoBehaviour {
 			}
 		} 
 		else if (gameFlag == GAME_STATUS.GAME_OVER) {
-			this.winPanel.SetActive(true);
+			if (isVR) {
+				this.winPanelVR.SetActive(true);
+			}
+			else{
+				this.winPanel.SetActive(true);
+			}
+
 			if (Input.GetKey (KeyCode.Space)) {
 				ResetLevel();
 				Application.LoadLevel (ConstantScript.SCENE_INGAME);

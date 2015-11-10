@@ -11,7 +11,17 @@ public class JumpTarget : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		player = GameObject.Find("Player");
+
+
+	}
+
+	void Start(){
+		if (GameSceneHandler.isVR) {
+			player = GameObject.Find("CameraForOculus");
+		} 
+		else {
+			player = GameObject.Find("Player");
+		}
 	}
 	
 	// Update is called once per frame
