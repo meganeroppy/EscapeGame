@@ -24,7 +24,7 @@ public class BeaconMaker : MonoBehaviour {
 	
 	private void Restart(){
 	
-	Debug.Log("Restart");
+	//Debug.Log("Restart");
 		beacon.transform.position = originPos;
 		
 		beacon.transform.DOMove(targetPos, duration).SetEase(ease).SetDelay(wait).OnComplete(delegate{
