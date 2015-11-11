@@ -72,7 +72,7 @@ public class CameraScript : MonoBehaviour {
 						this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
 					}
 					else{
-						this.transform.GetChild(2).gameObject.GetComponent<GlitchFx>().startGlitch = true;
+						this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>().startGlitch = true;
 					}
 
 					//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;

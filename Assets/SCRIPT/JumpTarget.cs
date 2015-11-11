@@ -27,7 +27,8 @@ public class JumpTarget : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		bool playerIsOnThis = player.transform.position == this.transform.position;
+		Vector3 offset =  player.transform.position - this.transform.position;
+		bool playerIsOnThis = Mathf.Abs( offset.x ) < Vector3.one.x * 0.1f &&  Mathf.Abs( offset.y ) <  Vector3.one.y * 0.1f &&  Mathf.Abs( offset.z ) < Vector3.one.z * 0.1f;
 
 		if(!explored){
 			if(playerIsOnThis){
