@@ -25,8 +25,14 @@ public class CameraScript : MonoBehaviour {
 	[SerializeField]
 	private AudioClip se_jumpSatrt;
 
+	private Vector3 curPos; 
+	private Vector3 prevPos; 
+	private BeaconMaker beacon;
+	
 
 	void Awake(){
+		curPos = transform.position;
+		beacon = GetComponent<BeaconMaker>();
 		audioSource = transform.GetComponent<AudioSource>();
 		this.handController.SetActive (false);
 	}
@@ -36,7 +42,7 @@ public class CameraScript : MonoBehaviour {
 		Ray ray = m_camera.ViewportPointToRay (new Vector3 (0.5f,0.5f,0.0f));
 		
 		if (Physics.Raycast (ray, out hit)) {
-			Transform objectHit = hit.transform;
+			//Transform objectHit = hit.transform;
 			this.target = hit.transform.gameObject;
 			if (hit.transform.gameObject.layer == ConstantScript.CAMERA_LAYER || 
 			    hit.transform.gameObject.layer == ConstantScript.ROBOT_LAYER || 
@@ -121,7 +127,11 @@ public class CameraScript : MonoBehaviour {
 
 			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
 			   this.target.layer == ConstantScript.ROBOT_LAYER){
-
+				// play se
+				audioSource.PlayOneShot(se_jumpComplete);
+				
+				prevPos = this.transform.position;
+				
 				if(this.target.layer == ConstantScript.CAMERA_LAYER){
 					this.handController.SetActive (false);
 				}
@@ -142,6 +152,8 @@ public class CameraScript : MonoBehaviour {
 					this.transform.position = this.target.transform.position;
 				}
 				//	Transform temp = target.transform.GetChild(0);
+				curPos = this.transform.position;
+				UpdateBeacon();
 				//this.transform.parent.gameObject.transform.position = this.target.transform.position;
 
 			}
@@ -177,4 +189,9 @@ public class CameraScript : MonoBehaviour {
 	public void MoveRight(float speed){
 		this.transform.Rotate(Vector3.up * speed * Time.deltaTime);
 	}
+	
+	private void UpdateBeacon(){
+		beacon.UpdatePos(prevPos, curPos);
+	}
+	
 }
