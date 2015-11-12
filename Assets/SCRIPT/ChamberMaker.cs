@@ -19,7 +19,7 @@ public class ChamberMaker : MonoBehaviour {
 				for(int f=0 ; f < floor ; f++){
 					GameObject g = Instantiate(chamber);
 					g.transform.position = new Vector3(l * offset, r * offset, f * offset);
-					
+					g.transform.SetParent(transform);
 				}
 			}
 		}
