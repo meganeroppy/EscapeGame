@@ -24,7 +24,7 @@ public class GoalScript : MonoBehaviour {
 			this.feet.GetComponent<Rigidbody>().useGravity = true;
 			this.wall1.SetActive(false);
 			this.wall2.SetActive(false);
-			this.walltomei.SetActive(false);
+			//this.walltomei.SetActive(false);
 		}
 	}
 }
