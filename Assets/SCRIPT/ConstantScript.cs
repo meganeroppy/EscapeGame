@@ -15,7 +15,8 @@ public static class ConstantScript
 
 	public const float LOOK_DELAY = 0.0f;
 
-	public const string SCENE_INGAME = "Main";
+	//public const string SCENE_INGAME = "Main";
+	public const string SCENE_INGAME = "DebugScene02";
 
 
 	public const float GLITCH_ATSTART_SPEED = 0.5f;
