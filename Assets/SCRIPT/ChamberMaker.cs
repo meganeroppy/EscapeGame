@@ -3,10 +3,15 @@ using System.Collections;
 
 public class ChamberMaker : MonoBehaviour {
 
+	
+	[SerializeField]
 	private int line = 10; // test
+	[SerializeField]
 	private int raw = 10;
+	[SerializeField]
 	private int floor = 10;
 
+	[SerializeField]
 	Vector3 c01 = new Vector3(0, 0, 0);
 	Vector3 c02;
 	Vector3 c03;

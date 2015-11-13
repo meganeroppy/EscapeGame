@@ -4,17 +4,19 @@ using System.Collections;
 public class GateKey : MonoBehaviour {
 
 	public bool unlocked{get;private set;}
-	private GameObject check;
+	private SpriteRenderer img;
+	[SerializeField]
+	private Sprite locked_img;
+	[SerializeField]
+	private Sprite unlocked_img;
 
 	private void Awake(){
 		unlocked = false;
-		check = transform.FindChild("Check").gameObject;
+		img = transform.GetChild(0).GetComponent<SpriteRenderer>();
 	}
 	
 	void Update(){
-		if(check != null){
-			check.SetActive(unlocked);
-		}
+		img.sprite = unlocked ? unlocked_img : locked_img;
 	}
 
 	private void OnCollisionEnter(Collision col){
