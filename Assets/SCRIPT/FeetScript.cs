@@ -21,7 +21,9 @@ public class FeetScript : MonoBehaviour {
 			Debug.Log ("jatuhhhcoi");
 			this.pipe.SetActive (false);
 			this.gameObject.SetActive (false);
-			this.GetComponent<AudioSource>().PlayOneShot(gattaiSound);
+			if(this.GetComponent<AudioSource>().enabled){
+				this.GetComponent<AudioSource>().Play();
+			}
 			
 			this.currentBody.SetActive (false);
 			this.perfectBody.SetActive (true);
