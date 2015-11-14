@@ -28,9 +28,11 @@ public class CameraScript : MonoBehaviour {
 	private Vector3 curPos; 
 	private Vector3 prevPos; 
 	private BeaconMaker beacon;
-		private float wait = 0f;
+	private float wait = 0f;
 
 	private bool isFinal = false;
+	
+	private GlitchFx glitch;
 	
 	void Awake(){
 		curPos = transform.position;
@@ -38,11 +40,32 @@ public class CameraScript : MonoBehaviour {
 		audioSource = transform.GetComponent<AudioSource>();
 		this.handController.SetActive (false);
 	}
+	
+	void Start(){
+		if(GameSceneHandler.isVR){
+			glitch = this.gameObject.GetComponent<GlitchFx>();
+		}
+		else{
+			glitch = this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>();
+		}
+	}
+	
 	// Update is called once per frame
 	void Update () {
-				if(wait > 0f){
+		
+	
+		if(wait > 0f){
 			wait -= Time.deltaTime;
+			this.circularTarget.fillAmount = 1;
+			this.circularTarget.color = Color.yellow;
+			return;
+		}else{
+			this.circularTarget.color = Color.white;
+			if( glitch.startGlitch ){
+				this.circularTarget.fillAmount = 1;
+			}
 		}
+		
 		if (isFinal == false) {
 			RaycastHit hit;
 			Ray ray = m_camera.ViewportPointToRay (new Vector3 (0.5f,0.5f,0.0f));
@@ -64,28 +87,25 @@ public class CameraScript : MonoBehaviour {
 					
 					this.timerTemp += Time.deltaTime;
 					
-					this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
+					//this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
+					// Debug.Log(timerTemp);
+					this.circularTarget.fillAmount = timerTemp / (ConstantScript.LOOK_LENGTH);
 					
 					if(this.timerTemp >= ConstantScript.LOOK_DELAY){
 						countDown.gameObject.SetActive(true);
-						countDown.text = ""+(this.timerTemp - wait);
+						countDown.text = ""+(this.timerTemp);
 					}
 					
-					if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + wait)){
+					if(this.timerTemp >= (ConstantScript.LOOK_LENGTH)){
 						
 						audioSource.PlayOneShot(se_jumpSatrt);
 						
-						
 						this.timerTemp = 0.0f;
-						this.circularTarget.fillAmount = 0.0f;
+						//this.circularTarget.fillAmount = 0.0f;
 						countDown.gameObject.SetActive(false);
 						countDown.text = "0.0";
-						if(GameSceneHandler.isVR){
-							this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
-						}
-						else{
-							this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>().startGlitch = true;
-						}
+						
+						glitch.startGlitch = true;
 						
 						//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
 						//					this.Jump(hit.transform.gameObject);
@@ -141,6 +161,9 @@ public class CameraScript : MonoBehaviour {
 				
 				this.transform.position = temp;
 			}
+			
+			this.circularTarget.fillAmount = 0.0f;
+			
 		}
 		
 		
@@ -149,15 +172,14 @@ public class CameraScript : MonoBehaviour {
 	public void Jump(){
 		//Debug.Log ("jumping");
 		if (this.target) {
-			//Debug.Log("ciat");
-			
-			wait = ConstantScript.LOOK_DELAY;
-			
+			//Debug.Log("ciat");			
 			
 			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
 			   this.target.layer == ConstantScript.ROBOT_LAYER){
 				// play se
 				audioSource.PlayOneShot(se_jumpComplete);
+				
+				wait = ConstantScript.LOOK_DELAY;
 				
 				prevPos = this.transform.position;
 				

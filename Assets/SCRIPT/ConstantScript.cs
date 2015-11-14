@@ -13,7 +13,7 @@ public static class ConstantScript
 	public const int ROBOT_LAYER = 11;
 	//public const float LOOK_LENGTH = 2.0f;
 
-	public const float LOOK_DELAY = 2.0f;
+	public const float LOOK_DELAY = 1.7f;
 
 	//public const string SCENE_INGAME = "Main";
 	public const string SCENE_INGAME = "DebugScene02";
@@ -25,6 +25,6 @@ public static class ConstantScript
 	public const float GLITCH_SPEED = 5.0f;
 
 	//見つめる長さー＞0.2秒
-	public const float LOOK_LENGTH = 0.4f;
+	public const float LOOK_LENGTH = 0.7f;
 	
 }
