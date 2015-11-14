@@ -17,7 +17,11 @@ public class ChamberMaker : MonoBehaviour {
 	Vector3 c03;
 	Vector3 c04;
 	Vector3 c05;
-
+	
+	[SerializeField]
+	private GameObject player;
+	[SerializeField]
+	private GameObject playerVR;
 	
 	[SerializeField]
 	private GameObject chamber01;
@@ -36,7 +40,7 @@ public class ChamberMaker : MonoBehaviour {
 
 	void Awake(){
 		c02 = c01 + new Vector3(1f, 0, 0);
-		c03 = c01 + new Vector3(1f, 1f, 0);
+		c03 = c01 + new Vector3(1f, 0, 1f);
 		c04 = c01 + new Vector3(1f, 1f, 1f);
 		c05 = c01 + new Vector3(0f, 1f, 1f);
 	}
@@ -50,6 +54,8 @@ public class ChamberMaker : MonoBehaviour {
 				
 					if(new Vector3(l, r, f) == c01){
 						g =	Instantiate(chamber01);
+						player.transform.position += new Vector3(l * offset, r * offset, f * offset);
+						playerVR.transform.position += new Vector3(l * offset, r * offset, f * offset);
 					}else if(new Vector3(l, r, f) == c02){
 						g =	Instantiate(chamber02);
 					}else if(new Vector3(l, r, f) == c03){
