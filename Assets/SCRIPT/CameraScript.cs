@@ -28,9 +28,9 @@ public class CameraScript : MonoBehaviour {
 	private Vector3 curPos; 
 	private Vector3 prevPos; 
 	private BeaconMaker beacon;
-	
-	private float wait = 0f;
-	
+		private float wait = 0f;
+
+	private bool isFinal = false;
 	
 	void Awake(){
 		curPos = transform.position;
@@ -40,90 +40,109 @@ public class CameraScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-	
-		if(wait > 0f){
+				if(wait > 0f){
 			wait -= Time.deltaTime;
 		}
-	
-		RaycastHit hit;
-		Ray ray = m_camera.ViewportPointToRay (new Vector3 (0.5f,0.5f,0.0f));
-		
-		if (Physics.Raycast (ray, out hit)) {
-			//Transform objectHit = hit.transform;
-			this.target = hit.transform.gameObject;
-			if (hit.transform.gameObject.layer == ConstantScript.CAMERA_LAYER || 
-			    hit.transform.gameObject.layer == ConstantScript.ROBOT_LAYER || 
-			    hit.transform.gameObject.layer == ConstantScript.GOAL_LAYER) {
-				//Debug.Log ("CAMERA HIT");
-				if (prevGobj && prevMaterial) {
-					this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
-				}
-				this.prevMaterial = hit.transform.gameObject.GetComponent<Renderer> ().material;
-				
-				hit.transform.gameObject.GetComponent<Renderer> ().material = chosenObject;
-				this.prevGobj = hit.transform.gameObject;
-				
-				this.timerTemp += Time.deltaTime;
-				
-				this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
-				
-				if(this.timerTemp >= wait){
-					countDown.gameObject.SetActive(true);
-					countDown.text = ""+(this.timerTemp);
-				}
-				
-				if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + wait)){
-					
-					audioSource.PlayOneShot(se_jumpSatrt);
-					
-					
-					this.timerTemp = 0.0f;
-					this.circularTarget.fillAmount = 0.0f;
-					countDown.gameObject.SetActive(false);
-					countDown.text = "0.0";
-					if(GameSceneHandler.isVR){
-						this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
-					}
-					else{
-						this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>().startGlitch = true;
-					}
-					
-					//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
-					//					this.Jump(hit.transform.gameObject);
-				}
-			}else{ 
-				// watch something not a camera
-				this.timerTemp = 0.0f;
-				countDown.gameObject.SetActive(false);
-				countDown.text = "0.0";
-				this.circularTarget.fillAmount = 0.0f;
-				//this.Jump(hit.transform.gameObject);
-			}
+		if (isFinal == false) {
+			RaycastHit hit;
+			Ray ray = m_camera.ViewportPointToRay (new Vector3 (0.5f,0.5f,0.0f));
 			
-			
-			//Debug.Log("test "+hit.transform.gameObject.layer);
-			
-			// Do something with the object that was hit by the raycast.
-		} 
-		else {
-			//this.target = null;
-			if(this.prevGobj){
-				if(this.prevGobj.layer == ConstantScript.CAMERA_LAYER || 
-				   this.prevGobj.layer == ConstantScript.ROBOT_LAYER || 
-				   this.prevGobj.layer == ConstantScript.GOAL_LAYER){
+			if (Physics.Raycast (ray, out hit)) {
+				//Transform objectHit = hit.transform;
+				this.target = hit.transform.gameObject;
+				if (hit.transform.gameObject.layer == ConstantScript.CAMERA_LAYER || 
+				    hit.transform.gameObject.layer == ConstantScript.ROBOT_LAYER || 
+				    hit.transform.gameObject.layer == ConstantScript.GOAL_LAYER) {
+					//Debug.Log ("CAMERA HIT");
 					if (prevGobj && prevMaterial) {
 						this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
 					}
-					this.prevGobj = null;
-					this.prevMaterial = null;
+					this.prevMaterial = hit.transform.gameObject.GetComponent<Renderer> ().material;
+					
+					hit.transform.gameObject.GetComponent<Renderer> ().material = chosenObject;
+					this.prevGobj = hit.transform.gameObject;
+					
+					this.timerTemp += Time.deltaTime;
+					
+					this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
+					
+					if(this.timerTemp >= ConstantScript.LOOK_DELAY){
+						countDown.gameObject.SetActive(true);
+						countDown.text = ""+(this.timerTemp - wait);
+					}
+					
+					if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + wait)){
+						
+						audioSource.PlayOneShot(se_jumpSatrt);
+						
+						
+						this.timerTemp = 0.0f;
+						this.circularTarget.fillAmount = 0.0f;
+						countDown.gameObject.SetActive(false);
+						countDown.text = "0.0";
+						if(GameSceneHandler.isVR){
+							this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
+						}
+						else{
+							this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>().startGlitch = true;
+						}
+						
+						//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
+						//					this.Jump(hit.transform.gameObject);
+					}
+				}else{ 
+					// watch something not a camera
 					this.timerTemp = 0.0f;
 					countDown.gameObject.SetActive(false);
 					countDown.text = "0.0";
 					this.circularTarget.fillAmount = 0.0f;
+					//this.Jump(hit.transform.gameObject);
 				}
+				
+				
+				//Debug.Log("test "+hit.transform.gameObject.layer);
+				
+				// Do something with the object that was hit by the raycast.
+			} 
+			else {
+				//this.target = null;
+				if(this.prevGobj){
+					if(this.prevGobj.layer == ConstantScript.CAMERA_LAYER || 
+					   this.prevGobj.layer == ConstantScript.ROBOT_LAYER || 
+					   this.prevGobj.layer == ConstantScript.GOAL_LAYER){
+						if (prevGobj && prevMaterial) {
+							this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
+						}
+						this.prevGobj = null;
+						this.prevMaterial = null;
+						this.timerTemp = 0.0f;
+						countDown.gameObject.SetActive(false);
+						countDown.text = "0.0";
+						this.circularTarget.fillAmount = 0.0f;
+					}
+				}
+				
 			}
+		} 
+		else {
+			float deltatime = Time.deltaTime;
 			
+			if(GameSceneHandler.isVR){
+				Vector3 temp = this.transform.parent.position;
+				
+				temp.z -= 1 * deltatime;
+				
+				this.transform.parent.position = temp;
+			}
+			else{
+				Vector3 temp = this.transform.position;
+				
+				temp.z -= 1 * deltatime;
+				
+				this.transform.position = temp;
+			}
 		}
+		
 		
 	}
 	
@@ -132,10 +151,11 @@ public class CameraScript : MonoBehaviour {
 		if (this.target) {
 			//Debug.Log("ciat");
 			
+			wait = ConstantScript.LOOK_DELAY;
+			
+			
 			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
 			   this.target.layer == ConstantScript.ROBOT_LAYER){
-			   
-				wait = ConstantScript.LOOK_DELAY;
 				// play se
 				audioSource.PlayOneShot(se_jumpComplete);
 				
@@ -150,7 +170,7 @@ public class CameraScript : MonoBehaviour {
 				
 				audioSource.PlayOneShot(se_jumpComplete);
 				if(GameSceneHandler.isVR){
-					InputTracking.Recenter();
+					//InputTracking.Recenter();
 					Transform temp = this.target.transform.GetChild(0);
 					this.transform.parent.gameObject.transform.position = this.target.transform.position;
 					this.transform.parent.rotation = temp.rotation;
@@ -171,7 +191,7 @@ public class CameraScript : MonoBehaviour {
 			else if(this.target.layer == ConstantScript.GOAL_LAYER){
 				audioSource.PlayOneShot(se_jumpComplete);
 				if(GameSceneHandler.isVR){
-					InputTracking.Recenter();
+					//InputTracking.Recenter();
 					Transform temp = this.target.transform.GetChild(0);
 					this.transform.parent.rotation = temp.rotation;
 					this.transform.parent.gameObject.transform.position = this.target.transform.position;
@@ -185,6 +205,8 @@ public class CameraScript : MonoBehaviour {
 				
 				//this.transform.rotation = temp.rotation;
 				GameSceneHandler.gameFlag = GameSceneHandler.GAME_STATUS.GAME_OVER;
+				this.isFinal = true;
+				GameObject.Find("GoalFullBody").SetActive(false);
 			}
 			
 		}
