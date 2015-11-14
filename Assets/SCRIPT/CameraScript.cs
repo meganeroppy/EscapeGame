@@ -1,35 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using UnityEngine.VR;
 public class CameraScript : MonoBehaviour {
-
+	
 	public Image circularTarget;
 	
 	public Material chosenObject;
 	private Material prevMaterial;
 	private GameObject prevGobj;
-
+	
 	public GameObject handController;
-
+	
 	private float timerTemp;
 	public Text countDown;
 	public Camera m_camera;
-
+	
 	private GameObject target;
 	// Use this for initialization
-
+	
 	private AudioSource audioSource;
 	[SerializeField]
 	private AudioClip se_jumpComplete;
 	[SerializeField]
 	private AudioClip se_jumpSatrt;
-
+	
 	private Vector3 curPos; 
 	private Vector3 prevPos; 
 	private BeaconMaker beacon;
 	
-
+	
 	void Awake(){
 		curPos = transform.position;
 		beacon = GetComponent<BeaconMaker>();
@@ -52,24 +52,24 @@ public class CameraScript : MonoBehaviour {
 					this.prevGobj.GetComponent<Renderer> ().material = this.prevMaterial;
 				}
 				this.prevMaterial = hit.transform.gameObject.GetComponent<Renderer> ().material;
-
+				
 				hit.transform.gameObject.GetComponent<Renderer> ().material = chosenObject;
 				this.prevGobj = hit.transform.gameObject;
-
+				
 				this.timerTemp += Time.deltaTime;
-
+				
 				this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
-
+				
 				if(this.timerTemp >= ConstantScript.LOOK_DELAY){
 					countDown.gameObject.SetActive(true);
 					countDown.text = ""+(this.timerTemp - ConstantScript.LOOK_DELAY);
 				}
-
+				
 				if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + ConstantScript.LOOK_DELAY)){
-
+					
 					audioSource.PlayOneShot(se_jumpSatrt);
-
-
+					
+					
 					this.timerTemp = 0.0f;
 					this.circularTarget.fillAmount = 0.0f;
 					countDown.gameObject.SetActive(false);
@@ -80,22 +80,22 @@ public class CameraScript : MonoBehaviour {
 					else{
 						this.transform.GetChild(1).gameObject.GetComponent<GlitchFx>().startGlitch = true;
 					}
-
+					
 					//this.gameObject.GetComponent<GlitchFx>().startGlitch = true;
-//					this.Jump(hit.transform.gameObject);
+					//					this.Jump(hit.transform.gameObject);
 				}
 			}else{ 
-			// watch something not a camera
+				// watch something not a camera
 				this.timerTemp = 0.0f;
 				countDown.gameObject.SetActive(false);
 				countDown.text = "0.0";
 				this.circularTarget.fillAmount = 0.0f;
 				//this.Jump(hit.transform.gameObject);
 			}
-
+			
 			
 			//Debug.Log("test "+hit.transform.gameObject.layer);
-
+			
 			// Do something with the object that was hit by the raycast.
 		} 
 		else {
@@ -115,16 +115,16 @@ public class CameraScript : MonoBehaviour {
 					this.circularTarget.fillAmount = 0.0f;
 				}
 			}
-
+			
 		}
-
+		
 	}
-
+	
 	public void Jump(){
 		//Debug.Log ("jumping");
 		if (this.target) {
 			//Debug.Log("ciat");
-
+			
 			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
 			   this.target.layer == ConstantScript.ROBOT_LAYER){
 				// play se
@@ -138,12 +138,14 @@ public class CameraScript : MonoBehaviour {
 				else if(this.target.layer == ConstantScript.ROBOT_LAYER){
 					this.handController.SetActive (true);
 				}
-
+				
 				audioSource.PlayOneShot(se_jumpComplete);
 				if(GameSceneHandler.isVR){
+					InputTracking.Recenter();
 					Transform temp = this.target.transform.GetChild(0);
 					this.transform.parent.gameObject.transform.position = this.target.transform.position;
 					this.transform.parent.rotation = temp.rotation;
+					
 				}
 				else{
 					Transform temp = this.target.transform.GetChild(0);
@@ -155,37 +157,42 @@ public class CameraScript : MonoBehaviour {
 				curPos = this.transform.position;
 				UpdateBeacon();
 				//this.transform.parent.gameObject.transform.position = this.target.transform.position;
-
+				
 			}
 			else if(this.target.layer == ConstantScript.GOAL_LAYER){
 				audioSource.PlayOneShot(se_jumpComplete);
 				if(GameSceneHandler.isVR){
+					InputTracking.Recenter();
+					Transform temp = this.target.transform.GetChild(0);
+					this.transform.parent.rotation = temp.rotation;
 					this.transform.parent.gameObject.transform.position = this.target.transform.position;
 				}
 				else{
+					Transform temp = this.target.transform.GetChild(0);
+					this.transform.parent.rotation = temp.rotation;
 					this.transform.position = this.target.transform.position;
 				}
 				//Transform temp = target.transform.GetChild(0);
-
+				
 				//this.transform.rotation = temp.rotation;
 				GameSceneHandler.gameFlag = GameSceneHandler.GAME_STATUS.GAME_OVER;
 			}
-
+			
 		}
 	}
-
+	
 	public void MoveUp(float speed){
 		this.transform.Rotate(Vector3.left * speed * Time.deltaTime);
 	}
-
+	
 	public void MoveDown(float speed){
 		this.transform.Rotate(Vector3.right * speed * Time.deltaTime);
 	}
-
+	
 	public void MoveLeft(float speed){
 		this.transform.Rotate(Vector3.down * speed * Time.deltaTime);
 	}
-
+	
 	public void MoveRight(float speed){
 		this.transform.Rotate(Vector3.up * speed * Time.deltaTime);
 	}

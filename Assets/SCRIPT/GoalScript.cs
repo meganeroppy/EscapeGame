@@ -4,6 +4,7 @@ using System.Collections;
 public class GoalScript : MonoBehaviour {
 	
 	public GameObject feet;
+	
 	public GameObject wall1;
 	public GameObject wall2;
 	public GameObject walltomei;

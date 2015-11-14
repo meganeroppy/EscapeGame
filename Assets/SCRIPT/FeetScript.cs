@@ -4,6 +4,8 @@ using System.Collections;
 public class FeetScript : MonoBehaviour {
 
 	public GameObject currentBody;
+	
+	public GameObject currentHead;
 
 	public GameObject perfectBody;
 
@@ -26,6 +28,7 @@ public class FeetScript : MonoBehaviour {
 			}
 			
 			this.currentBody.SetActive (false);
+			this.currentHead.transform.GetChild(0).gameObject.SetActive (false);
 			this.perfectBody.SetActive (true);
 		}
 
