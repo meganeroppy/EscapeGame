@@ -33,12 +33,16 @@ public class BeaconMaker : MonoBehaviour {
 	}
 	
 	public void UpdatePos(Vector3 originPos, Vector3 targetPos){
-		if(beacon == null){
-			beacon = Instantiate(beaconPrefab);
+	
+		if(beacon != null){
+			Destroy( beacon.gameObject);
 		}
+		//if(beacon == null){
+			beacon = Instantiate(beaconPrefab);
+		//}
 		this.originPos = originPos;
 		this.targetPos = targetPos;
-		DOTween.Clear();
+		//DOTween.Clear();
 		Restart();
 		
 	}
