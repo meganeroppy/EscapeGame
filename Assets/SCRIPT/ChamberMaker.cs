@@ -45,7 +45,7 @@ public class ChamberMaker : MonoBehaviour {
 	private bool falled = false;
 	
 	[SerializeField]
-	float duration = 300f;
+	float duration = 3f;
 	
 	private float offset = 50f;
 	
