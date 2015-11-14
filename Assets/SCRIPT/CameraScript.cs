@@ -29,6 +29,8 @@ public class CameraScript : MonoBehaviour {
 	private Vector3 prevPos; 
 	private BeaconMaker beacon;
 	
+	private float wait = 0f;
+	
 	
 	void Awake(){
 		curPos = transform.position;
@@ -38,6 +40,11 @@ public class CameraScript : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
+	
+		if(wait > 0f){
+			wait -= Time.deltaTime;
+		}
+	
 		RaycastHit hit;
 		Ray ray = m_camera.ViewportPointToRay (new Vector3 (0.5f,0.5f,0.0f));
 		
@@ -60,12 +67,12 @@ public class CameraScript : MonoBehaviour {
 				
 				this.circularTarget.fillAmount += Time.deltaTime/ (ConstantScript.LOOK_LENGTH);
 				
-				if(this.timerTemp >= ConstantScript.LOOK_DELAY){
+				if(this.timerTemp >= wait){
 					countDown.gameObject.SetActive(true);
-					countDown.text = ""+(this.timerTemp - ConstantScript.LOOK_DELAY);
+					countDown.text = ""+(this.timerTemp);
 				}
 				
-				if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + ConstantScript.LOOK_DELAY)){
+				if(this.timerTemp >= (ConstantScript.LOOK_LENGTH + wait)){
 					
 					audioSource.PlayOneShot(se_jumpSatrt);
 					
@@ -127,6 +134,8 @@ public class CameraScript : MonoBehaviour {
 			
 			if(this.target.layer == ConstantScript.CAMERA_LAYER ||
 			   this.target.layer == ConstantScript.ROBOT_LAYER){
+			   
+				wait = ConstantScript.LOOK_DELAY;
 				// play se
 				audioSource.PlayOneShot(se_jumpComplete);
 				
